@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.garmin</groupId>
     <artifactId>fit</artifactId>
-    <version>1.1.1</version>
+    <version>21.120.0</version>
     <packaging>jar</packaging>
     <name>FIT SDK</name>
     <description>The Official Garmin FIT SDK</description>
@@ -20,19 +20,7 @@
 
     <developers>
         <developer>
-            <id>pryhodagarmin</id>
-            <name>Ben Pryhoda</name>
-            <email>ben.proyhoda@garmin.com</email>
-        </developer>
-        <developer>
-            <id>Lijah99</id>
-            <name>Elijah Flinders</name>
-            <email>elijah.flinders@garmin.com</email>
-        </developer>
-        <developer>
-            <id>gracepipho</id>
-            <name>Grace Pipho</name>
-            <email>grace.pipho@garmin.com</email>
+            <name>Garmin FIT SDK Developer</name>
         </developer>
     </developers>
 
