@@ -115,8 +115,8 @@ public class ActivityFileValidationPlugin implements MesgBroadcastPlugin {
     }
 
     /**
-     * Repeat message validation by passing an empty List<Mesg> to onBroadcast().
-     * Some checks may be skipped or fail since the List<Mesg> is empty. In normal
+     * Repeat message validation by passing an empty message list to onBroadcast().
+     * Some checks may be skipped or fail since the message list is empty. In normal
      * circumstances, this method does not need to called directly.
      */
     public void repeatValidation() {
