@@ -11,7 +11,7 @@ The latest version of the SDK can be downloaded from [Maven Central Repository](
 <dependency>
     <groupId>com.garmin</groupId>
     <artifactId>fit</artifactId>
-    <version>21.120.0</version>
+    <version>[21.120.0,)</version>
 </dependency>
 ```
 
@@ -19,17 +19,29 @@ The latest version of the SDK can be downloaded from [Maven Central Repository](
 The following examples with step-by-step instructions can be found in the [FIT SDK Cookbook](https://developer.garmin.com/fit/cookbook/).
 
 ### Decoding an Activity File
-View the more detailed [Cookbook Recipe](https://developer.garmin.com/fit/cookbook/decoding-activity-files/) on decoding activity FIT files.
-https://github.com/garmin/fit-java-sdk/blob/aa47e36cb94f1282347e7482d66e2559e0b31127/com/garmin/fit/examples/DecodeExample.java#L1-L293
+The FIT C# SDK contains example code for decoding FIT Activity files. See the [Decoding FIT Activity Files](https://developer.garmin.com/fit/cookbook/decoding-activity-files/) recipe for details on decoding FIT Activity files.
+<details>
+    <summary>Click to view code snippet</summary>
+    https://github.com/garmin/fit-java-sdk/blob/aa47e36cb94f1282347e7482d66e2559e0b31127/com/garmin/fit/examples/DecodeExample.java#L1-L293
+</details>
 
 ### Encoding an Activity File
-View the more detailed [Cookbook Recipe](https://developer.garmin.com/fit/cookbook/encoding-activity-files/) on encoding activity FIT files.
-https://github.com/garmin/fit-java-sdk/blob/aa47e36cb94f1282347e7482d66e2559e0b31127/com/garmin/fit/examples/EncodeActivity.java#L1-L700
+The FIT C# SDK contains example code for encoding FIT Activity files. See the [Encoding FIT Activity Files](https://developer.garmin.com/fit/cookbook/encoding-activity-files/) recipe for details on encoding FIT Activity files.
+<details>
+    <summary>Click to view code snippet</summary>
+    https://github.com/garmin/fit-java-sdk/blob/aa47e36cb94f1282347e7482d66e2559e0b31127/com/garmin/fit/examples/EncodeActivity.java#L1-L700
+</details>
 
 ### Encoding a Course File
-View the more detailed [Cookbook Recipe](https://developer.garmin.com/fit/cookbook/encoding-course-files/) on encoding course FIT files.
-https://github.com/garmin/fit-java-sdk/blob/aa47e36cb94f1282347e7482d66e2559e0b31127/com/garmin/fit/examples/EncodeCourse.java#L1-L297
+The FIT C# SDK contains example code for encoding FIT Course files. See the [Encoding FIT Course Files](https://developer.garmin.com/fit/cookbook/encoding-course-files/) recipe for details on encoding FIT Course files.
+<details>
+    <summary>Click to view code snippet</summary>
+    https://github.com/garmin/fit-java-sdk/blob/aa47e36cb94f1282347e7482d66e2559e0b31127/com/garmin/fit/examples/EncodeCourse.java#L1-L297
+</details>
 
 ### Encoding a Workout File
-View the more detailed [Cookbook Recipe](https://developer.garmin.com/fit/cookbook/encoding-workout-files/) on encoding workout FIT files.
-https://github.com/garmin/fit-java-sdk/blob/aa47e36cb94f1282347e7482d66e2559e0b31127/com/garmin/fit/examples/EncodeWorkout.java#L1-L469
+The FIT C# SDK contains example code for encoding FIT Workout files. See the [Encoding FIT Workout Files](https://developer.garmin.com/fit/cookbook/encoding-workout-files/) recipe for details on encoding FIT Workout files.
+<details>
+    <summary>Click to view code snippet</summary>
+    https://github.com/garmin/fit-java-sdk/blob/aa47e36cb94f1282347e7482d66e2559e0b31127/com/garmin/fit/examples/EncodeWorkout.java#L1-L469
+</details>
