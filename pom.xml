@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.garmin</groupId>
     <artifactId>fit</artifactId>
-    <version>21.120.1</version>
+    <version>21.120.2</version>
     <packaging>jar</packaging>
     <name>FIT SDK</name>
     <description>The Official Garmin FIT SDK</description>
@@ -14,7 +14,7 @@
     <licenses>
         <license>
             <name>Flexible and Interoperable Data Transfer (FIT) Protocol License Agreement</name>
-            <url>https://developer.garmin.com/fit/download/</url>
+            <url>https://github.com/garmin/fit-java-sdk/blob/main/LICENSE.txt</url>
         </license>
     </licenses>
 
