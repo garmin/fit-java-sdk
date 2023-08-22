@@ -15,7 +15,7 @@ The latest version of the SDK can be installed from [Maven Central Repository](h
 </dependency>
 ```
 
-## Cookbook Examples
+## FIT SDK Cookbook
 The [FIT SDK Cookbook](https://developer.garmin.com/fit/cookbook/) contains examples of using the FIT SDK to solve real-world problems. There are recipes for encoding and decoding Activity, Workout, and Course files; and recipes that provide tips for working with the FIT SDK.
 
 ### Decoding an Activity File
