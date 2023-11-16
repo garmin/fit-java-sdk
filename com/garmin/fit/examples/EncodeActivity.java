@@ -48,8 +48,13 @@ import java.util.TimeZone;
 public class EncodeActivity {
 
     public static void main(String[] args) {
-        CreateTimeBasedActivity();
-        CreateLapSwimActivity();
+        try {
+            CreateTimeBasedActivity();
+            CreateLapSwimActivity();
+        } catch (Exception e) {
+            System.out.println("Exception encoding activity: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     public static void CreateTimeBasedActivity() {

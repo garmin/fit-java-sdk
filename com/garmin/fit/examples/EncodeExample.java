@@ -21,16 +21,22 @@ import java.util.Random;
  */
 public class EncodeExample {
     public static void main(String[] args) {
-        System.out.printf("FIT Encode Example Application - Protocol %d.%d Profile %d.%d %s\n",
-                           Fit.PROTOCOL_VERSION_MAJOR,
-                           Fit.PROTOCOL_VERSION_MINOR,
-                           Fit.PROFILE_VERSION_MAJOR,
-                           Fit.PROFILE_VERSION_MINOR,
-                           Fit.PROFILE_TYPE);
+        try {
+            System.out.printf("FIT Encode Example Application - Protocol %d.%d Profile %d.%d %s\n",
+                            Fit.PROTOCOL_VERSION_MAJOR,
+                            Fit.PROTOCOL_VERSION_MINOR,
+                            Fit.PROFILE_VERSION_MAJOR,
+                            Fit.PROFILE_VERSION_MINOR,
+                            Fit.PROFILE_TYPE);
 
-        encodeExampleSettings();
-        encodeExampleMonitoring();
-        encodeExampleActivity();
+            encodeExampleSettings();
+            encodeExampleMonitoring();
+            encodeExampleActivity();
+
+        } catch (Exception e) {
+            System.out.println("Exception encoding file: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     private static void encodeExampleActivity() {
