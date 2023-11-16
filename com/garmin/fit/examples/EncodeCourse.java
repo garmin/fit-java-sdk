@@ -35,113 +35,119 @@ public class EncodeCourse {
     public static final int PRODUCTID = 0;
 
     public static void main(String[] args) {
-        // Create the output stream
-        FileEncoder encode;
-        String filename = "CourseEncodeRecipe.fit";
-
         try {
-            encode = new FileEncoder(new java.io.File(filename), Fit.ProtocolVersion.V2_0);
-        } catch (FitRuntimeException e) {
-            System.err.println("Error opening file " + filename);
-            e.printStackTrace();
-            return;
-        }
+            // Create the output stream
+            FileEncoder encode;
+            String filename = "CourseEncodeRecipe.fit";
 
-        // Get a list of course points
-        List<Map<String, Object>> courseData = getCoursePoints();
-
-        // Reference points for the course
-        Map<String, Object> firstRecord = courseData.get(0);
-        Map<String, Object> lastRecord = courseData.get(courseData.size() - 1);
-        Map<String, Object> halfwayRecord = courseData.get(courseData.size() / 2);
-        int startTimestamp = (int) firstRecord.get("timestamp");
-        int endTimestamp = (int) lastRecord.get("timestamp");
-        DateTime startDateTime = new DateTime(startTimestamp);
-        DateTime endDateTime = new DateTime(endTimestamp);
-
-        // Every FIT file MUST contain a 'File ID' message as the first message
-        FileIdMesg fileIdMesg = new FileIdMesg();
-        fileIdMesg.setType(File.COURSE);
-        fileIdMesg.setManufacturer(Manufacturer.DEVELOPMENT);
-        fileIdMesg.setProduct(PRODUCTID);
-        fileIdMesg.setTimeCreated(startDateTime);
-        fileIdMesg.setSerialNumber(12345L);
-        encode.write(fileIdMesg);
-
-        // Every FIT COURSE file MUST contain a Course message
-        CourseMesg courseMesg = new CourseMesg();
-        courseMesg.setName("Garmin Field Day");
-        courseMesg.setSport(Sport.CYCLING);
-        encode.write(courseMesg);
-
-        // Every FIT COURSE file MUST contain a Lap message
-        LapMesg lapMesg = new LapMesg();
-        lapMesg.setStartTime(startDateTime);
-        lapMesg.setTimestamp(startDateTime);
-        lapMesg.setTotalElapsedTime((float) endTimestamp - startTimestamp);
-        lapMesg.setTotalTimerTime((float) endTimestamp - startTimestamp);
-        lapMesg.setStartPositionLat((int) firstRecord.get("position_lat"));
-        lapMesg.setStartPositionLong((int) firstRecord.get("position_long"));
-        lapMesg.setEndPositionLat((int) lastRecord.get("position_lat"));
-        lapMesg.setEndPositionLong((int) lastRecord.get("position_long"));
-        lapMesg.setTotalDistance((float) lastRecord.get("distance"));
-        encode.write(lapMesg);
-
-        // Timer Events are REQUIRED for FIT COURSE files
-        EventMesg eventMesgStart = new EventMesg();
-        eventMesgStart.setTimestamp(startDateTime);
-        eventMesgStart.setEvent(Event.TIMER);
-        eventMesgStart.setEventType(EventType.START);
-        encode.write(eventMesgStart);
-
-        // Every FIT COURSE file MUST contain Record messages
-        for (Map<String, Object> record : courseData) {
-            int timestamp = (int) record.get("timestamp");
-            int latitude = (int) record.get("position_lat");
-            int longitude = (int) record.get("position_long");
-            float distance = (float) record.get("distance");
-            float speed = (float) record.get("speed");
-            float altitude = (float) record.get("altitude");
-
-            RecordMesg recordMesg = new RecordMesg();
-            recordMesg.setTimestamp(new DateTime(timestamp));
-            recordMesg.setPositionLat(latitude);
-            recordMesg.setPositionLong(longitude);
-            recordMesg.setDistance(distance);
-            recordMesg.setSpeed(speed);
-            recordMesg.setAltitude(altitude);
-            encode.write(recordMesg);
-
-            // Add a Course Point at the halfway point of the route
-            if (record == halfwayRecord) {
-                CoursePointMesg coursePointMesg = new CoursePointMesg();
-                coursePointMesg.setTimestamp(new DateTime(timestamp));
-                coursePointMesg.setName("Halfway");
-                coursePointMesg.setType(CoursePoint.GENERIC);
-                coursePointMesg.setPositionLat(latitude);
-                coursePointMesg.setPositionLong(longitude);
-                coursePointMesg.setDistance(distance);
-                encode.write(coursePointMesg);
+            try {
+                encode = new FileEncoder(new java.io.File(filename), Fit.ProtocolVersion.V2_0);
+            } catch (FitRuntimeException e) {
+                System.err.println("Error opening file " + filename);
+                e.printStackTrace();
+                return;
             }
-        }
 
-        // Timer Events are REQUIRED for FIT COURSE files
-        EventMesg eventMesgStop = new EventMesg();
-        eventMesgStop.setTimestamp(endDateTime);
-        eventMesgStop.setEvent(Event.TIMER);
-        eventMesgStop.setEventType(EventType.STOP_ALL);
-        encode.write(eventMesgStop);
+            // Get a list of course points
+            List<Map<String, Object>> courseData = getCoursePoints();
 
-        // Close the output stream
-        try {
-            encode.close();
-        } catch (FitRuntimeException e) {
-            System.err.println("Error closing encode.");
+            // Reference points for the course
+            Map<String, Object> firstRecord = courseData.get(0);
+            Map<String, Object> lastRecord = courseData.get(courseData.size() - 1);
+            Map<String, Object> halfwayRecord = courseData.get(courseData.size() / 2);
+            int startTimestamp = (int) firstRecord.get("timestamp");
+            int endTimestamp = (int) lastRecord.get("timestamp");
+            DateTime startDateTime = new DateTime(startTimestamp);
+            DateTime endDateTime = new DateTime(endTimestamp);
+
+            // Every FIT file MUST contain a 'File ID' message as the first message
+            FileIdMesg fileIdMesg = new FileIdMesg();
+            fileIdMesg.setType(File.COURSE);
+            fileIdMesg.setManufacturer(Manufacturer.DEVELOPMENT);
+            fileIdMesg.setProduct(PRODUCTID);
+            fileIdMesg.setTimeCreated(startDateTime);
+            fileIdMesg.setSerialNumber(12345L);
+            encode.write(fileIdMesg);
+
+            // Every FIT COURSE file MUST contain a Course message
+            CourseMesg courseMesg = new CourseMesg();
+            courseMesg.setName("Garmin Field Day");
+            courseMesg.setSport(Sport.CYCLING);
+            encode.write(courseMesg);
+
+            // Every FIT COURSE file MUST contain a Lap message
+            LapMesg lapMesg = new LapMesg();
+            lapMesg.setStartTime(startDateTime);
+            lapMesg.setTimestamp(startDateTime);
+            lapMesg.setTotalElapsedTime((float) endTimestamp - startTimestamp);
+            lapMesg.setTotalTimerTime((float) endTimestamp - startTimestamp);
+            lapMesg.setStartPositionLat((int) firstRecord.get("position_lat"));
+            lapMesg.setStartPositionLong((int) firstRecord.get("position_long"));
+            lapMesg.setEndPositionLat((int) lastRecord.get("position_lat"));
+            lapMesg.setEndPositionLong((int) lastRecord.get("position_long"));
+            lapMesg.setTotalDistance((float) lastRecord.get("distance"));
+            encode.write(lapMesg);
+
+            // Timer Events are REQUIRED for FIT COURSE files
+            EventMesg eventMesgStart = new EventMesg();
+            eventMesgStart.setTimestamp(startDateTime);
+            eventMesgStart.setEvent(Event.TIMER);
+            eventMesgStart.setEventType(EventType.START);
+            encode.write(eventMesgStart);
+
+            // Every FIT COURSE file MUST contain Record messages
+            for (Map<String, Object> record : courseData) {
+                int timestamp = (int) record.get("timestamp");
+                int latitude = (int) record.get("position_lat");
+                int longitude = (int) record.get("position_long");
+                float distance = (float) record.get("distance");
+                float speed = (float) record.get("speed");
+                float altitude = (float) record.get("altitude");
+
+                RecordMesg recordMesg = new RecordMesg();
+                recordMesg.setTimestamp(new DateTime(timestamp));
+                recordMesg.setPositionLat(latitude);
+                recordMesg.setPositionLong(longitude);
+                recordMesg.setDistance(distance);
+                recordMesg.setSpeed(speed);
+                recordMesg.setAltitude(altitude);
+                encode.write(recordMesg);
+
+                // Add a Course Point at the halfway point of the route
+                if (record == halfwayRecord) {
+                    CoursePointMesg coursePointMesg = new CoursePointMesg();
+                    coursePointMesg.setTimestamp(new DateTime(timestamp));
+                    coursePointMesg.setName("Halfway");
+                    coursePointMesg.setType(CoursePoint.GENERIC);
+                    coursePointMesg.setPositionLat(latitude);
+                    coursePointMesg.setPositionLong(longitude);
+                    coursePointMesg.setDistance(distance);
+                    encode.write(coursePointMesg);
+                }
+            }
+
+            // Timer Events are REQUIRED for FIT COURSE files
+            EventMesg eventMesgStop = new EventMesg();
+            eventMesgStop.setTimestamp(endDateTime);
+            eventMesgStop.setEvent(Event.TIMER);
+            eventMesgStop.setEventType(EventType.STOP_ALL);
+            encode.write(eventMesgStop);
+
+            // Close the output stream
+            try {
+                encode.close();
+            } catch (FitRuntimeException e) {
+                System.err.println("Error closing encode.");
+                e.printStackTrace();
+                return;
+            }
+
+            System.out.println("Encoded FIT Course File " + filename);
+
+        } catch (Exception e) {
+            System.out.println("Exception encoding course: " + e.getMessage());
             e.printStackTrace();
-            return;
         }
-
-        System.out.println("Encoded FIT Course File " + filename);
     }
 
     /**

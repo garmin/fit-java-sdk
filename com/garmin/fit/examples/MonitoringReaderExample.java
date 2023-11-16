@@ -19,26 +19,32 @@ public class MonitoringReaderExample implements MonitoringMesgListener  {
    private MesgCSVWriter mesgWriter;
 
    public static void main(String[] args) {
-      MonitoringReaderExample example = new MonitoringReaderExample();
-      String inputFile;
-      int interval;
-      System.out.printf("FIT Monitoring Reader Example Application - Protocol %d.%d Profile %d.%d %s\n", Fit.PROTOCOL_VERSION_MAJOR, Fit.PROTOCOL_VERSION_MINOR, Fit.PROFILE_VERSION_MAJOR, Fit.PROFILE_VERSION_MINOR, Fit.PROFILE_TYPE);
-      if (args.length != 2) {
-         System.out
-               .println("Usage: java -jar MonitoringReaderExample.jar <input file>.fit <interval>");
-         return;
+       try {
+         MonitoringReaderExample example = new MonitoringReaderExample();
+         String inputFile;
+         int interval;
+         System.out.printf("FIT Monitoring Reader Example Application - Protocol %d.%d Profile %d.%d %s\n", Fit.PROTOCOL_VERSION_MAJOR, Fit.PROTOCOL_VERSION_MINOR, Fit.PROFILE_VERSION_MAJOR, Fit.PROFILE_VERSION_MINOR, Fit.PROFILE_TYPE);
+         if (args.length != 2) {
+            System.out
+                  .println("Usage: java -jar MonitoringReaderExample.jar <input file>.fit <interval>");
+            return;
+         }
+
+         inputFile = args[0];
+         interval = Integer.parseInt(args[1]);
+
+         example.Process(inputFile, interval, false);
+
+         if (interval == MonitoringReader.DAILY_INTERVAL) {
+            example.Process(inputFile, interval, true);
+         }
+
+         System.out.println("Decoded monitoring data from " + args[0] + " to at " + args[1] + "s intervals.");
+
+      } catch (Exception e) {
+            System.out.println("Exception: " + e.getMessage());
+            e.printStackTrace();
       }
-
-      inputFile = args[0];
-      interval = Integer.parseInt(args[1]);
-
-      example.Process(inputFile, interval, false);
-
-      if (interval == MonitoringReader.DAILY_INTERVAL) {
-         example.Process(inputFile, interval, true);
-      }
-
-      System.out.println("Decoded monitoring data from " + args[0] + " to at " + args[1] + "s intervals.");
    }
 
    public void Process(String inputFile, int interval, boolean dailyTotals)

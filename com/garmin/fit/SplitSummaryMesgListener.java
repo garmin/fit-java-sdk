@@ -12,6 +12,6 @@
 
 package com.garmin.fit;
 
-public interface SleepLevelMesgListener {
-    public void onMesg(SleepLevelMesg mesg);
+public interface SplitSummaryMesgListener {
+    public void onMesg(SplitSummaryMesg mesg);
 }

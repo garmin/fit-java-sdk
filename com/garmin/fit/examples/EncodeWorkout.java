@@ -32,10 +32,15 @@ import java.util.Random;
 public class EncodeWorkout {
 
     public static void main(String[] args) {
-        CreateBikeTempoWorkout();
-        CreateRun800RepeatWorkout();
-        CreateCustomTargetValuesWorkout();
-        CreatePoolSwimWorkout();
+        try {
+            CreateBikeTempoWorkout();
+            CreateRun800RepeatWorkout();
+            CreateCustomTargetValuesWorkout();
+            CreatePoolSwimWorkout();            
+        } catch (Exception e) {
+            System.out.println("Exception encoding workout: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     public static void CreateBikeTempoWorkout() {

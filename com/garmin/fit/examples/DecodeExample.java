@@ -15,85 +15,91 @@ import java.io.InputStream;
 
 public class DecodeExample {
     public static void main(String[] args) {
-        Decode decode = new Decode();
-        //decode.skipHeader();        // Use on streams with no header and footer (stream contains FIT defn and data messages only)
-        //decode.incompleteStream();  // This suppresses exceptions with unexpected eof (also incorrect crc)
-        MesgBroadcaster mesgBroadcaster = new MesgBroadcaster(decode);
-        Listener listener = new Listener();
-        FileInputStream in;
-
-        System.out.printf("FIT Decode Example Application - Protocol %d.%d Profile %d.%d %s\n", Fit.PROTOCOL_VERSION_MAJOR, Fit.PROTOCOL_VERSION_MINOR, Fit.PROFILE_VERSION_MAJOR, Fit.PROFILE_VERSION_MINOR, Fit.PROFILE_TYPE);
-
-        if (args.length != 1) {
-            System.out.println("Usage: java -jar DecodeExample.jar <filename>");
-            return;
-        }
-
         try {
-            in = new FileInputStream(args[0]);
-        } catch (java.io.IOException e) {
-            throw new RuntimeException("Error opening file " + args[0] + " [1]");
-        }
+            Decode decode = new Decode();
+            //decode.skipHeader();        // Use on streams with no header and footer (stream contains FIT defn and data messages only)
+            //decode.incompleteStream();  // This suppresses exceptions with unexpected eof (also incorrect crc)
+            MesgBroadcaster mesgBroadcaster = new MesgBroadcaster(decode);
+            Listener listener = new Listener();
+            FileInputStream in;
 
-        try {
-            if (!decode.checkFileIntegrity((InputStream)in)) {
-                throw new RuntimeException("FIT file integrity failed.");
+            System.out.printf("FIT Decode Example Application - Protocol %d.%d Profile %d.%d %s\n", Fit.PROTOCOL_VERSION_MAJOR, Fit.PROTOCOL_VERSION_MINOR, Fit.PROFILE_VERSION_MAJOR, Fit.PROFILE_VERSION_MINOR, Fit.PROFILE_TYPE);
+
+            if (args.length != 1) {
+                System.out.println("Usage: java -jar DecodeExample.jar <filename>");
+                return;
             }
-        } catch (RuntimeException e) {
-            System.err.print("Exception Checking File Integrity: ");
-            System.err.println(e.getMessage());
-            System.err.println("Trying to continue...");
-        } finally {
+
+            try {
+                in = new FileInputStream(args[0]);
+            } catch (java.io.IOException e) {
+                throw new RuntimeException("Error opening file " + args[0] + " [1]");
+            }
+
+            try {
+                if (!decode.checkFileIntegrity((InputStream)in)) {
+                    throw new RuntimeException("FIT file integrity failed.");
+                }
+            } catch (RuntimeException e) {
+                System.err.print("Exception Checking File Integrity: ");
+                System.err.println(e.getMessage());
+                System.err.println("Trying to continue...");
+            } finally {
+                try {
+                    in.close();
+                } catch (java.io.IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
+            try {
+                in = new FileInputStream(args[0]);
+            } catch (java.io.IOException e) {
+                throw new RuntimeException("Error opening file " + args[0] + " [2]");
+            }
+
+            mesgBroadcaster.addListener((FileIdMesgListener)listener);
+            mesgBroadcaster.addListener((UserProfileMesgListener)listener);
+            mesgBroadcaster.addListener((DeviceInfoMesgListener)listener);
+            mesgBroadcaster.addListener((MonitoringMesgListener)listener);
+            mesgBroadcaster.addListener((RecordMesgListener)listener);
+
+            decode.addListener((DeveloperFieldDescriptionListener)listener);
+
+            try {
+                decode.read(in, mesgBroadcaster, mesgBroadcaster);
+            } catch (FitRuntimeException e) {
+                // If a file with 0 data size in it's header  has been encountered,
+                // attempt to keep processing the file
+                if (decode.getInvalidFileDataSize()) {
+                    decode.nextFile();
+                    decode.read(in, mesgBroadcaster, mesgBroadcaster);
+                } else {
+                    System.err.print("Exception decoding file: ");
+                    System.err.println(e.getMessage());
+
+                    try {
+                        in.close();
+                    } catch (java.io.IOException f) {
+                        throw new RuntimeException(f);
+                    }
+
+                    return;
+                }
+            }
+
             try {
                 in.close();
             } catch (java.io.IOException e) {
                 throw new RuntimeException(e);
             }
+
+            System.out.println("Decoded FIT file " + args[0] + ".");
+
+        } catch (Exception e) {
+            System.out.println("Exception decoding file: " + e.getMessage());
+            e.printStackTrace();
         }
-
-        try {
-            in = new FileInputStream(args[0]);
-        } catch (java.io.IOException e) {
-            throw new RuntimeException("Error opening file " + args[0] + " [2]");
-        }
-
-        mesgBroadcaster.addListener((FileIdMesgListener)listener);
-        mesgBroadcaster.addListener((UserProfileMesgListener)listener);
-        mesgBroadcaster.addListener((DeviceInfoMesgListener)listener);
-        mesgBroadcaster.addListener((MonitoringMesgListener)listener);
-        mesgBroadcaster.addListener((RecordMesgListener)listener);
-
-        decode.addListener((DeveloperFieldDescriptionListener)listener);
-
-        try {
-            decode.read(in, mesgBroadcaster, mesgBroadcaster);
-        } catch (FitRuntimeException e) {
-            // If a file with 0 data size in it's header  has been encountered,
-            // attempt to keep processing the file
-            if (decode.getInvalidFileDataSize()) {
-                decode.nextFile();
-                decode.read(in, mesgBroadcaster, mesgBroadcaster);
-            } else {
-                System.err.print("Exception decoding file: ");
-                System.err.println(e.getMessage());
-
-                try {
-                    in.close();
-                } catch (java.io.IOException f) {
-                    throw new RuntimeException(f);
-                }
-
-                return;
-            }
-        }
-
-        try {
-            in.close();
-        } catch (java.io.IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        System.out.println("Decoded FIT file " + args[0] + ".");
     }
 
     private static class Listener implements FileIdMesgListener, UserProfileMesgListener, DeviceInfoMesgListener, MonitoringMesgListener, RecordMesgListener, DeveloperFieldDescriptionListener {
