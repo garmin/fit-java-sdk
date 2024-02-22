@@ -37,8 +37,6 @@
     </properties>
 
     <build>
-        <sourceDirectory>com/garmin/fit</sourceDirectory>
-
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
