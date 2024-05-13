@@ -12,6 +12,6 @@
 
 package com.garmin.fit;
 
-public interface HsaAccelerometerDataMesgListener {
-    public void onMesg(HsaAccelerometerDataMesg mesg);
+public interface SkinTempOvernightMesgListener {
+    public void onMesg(SkinTempOvernightMesg mesg);
 }
