@@ -33,6 +33,7 @@ public class WorkoutMesg extends Mesg   {
     
     public static final int PoolLengthUnitFieldNum = 15;
     
+    public static final int NotesFieldNum = 17;
 
     protected static final  Mesg workoutMesg;
     static {
@@ -53,6 +54,8 @@ public class WorkoutMesg extends Mesg   {
         workoutMesg.addField(new Field("pool_length", PoolLengthFieldNum, 132, 100, 0, "m", false, Profile.Type.UINT16));
         
         workoutMesg.addField(new Field("pool_length_unit", PoolLengthUnitFieldNum, 0, 1, 0, "", false, Profile.Type.DISPLAY_MEASURE));
+
+        workoutMesg.addField(new Field("notes", NotesFieldNum, 7, 1, 0, "", false, Profile.Type.STRING));
         
     }
 
@@ -223,6 +226,24 @@ public class WorkoutMesg extends Mesg   {
      */
     public void setPoolLengthUnit(DisplayMeasure poolLengthUnit) {
         setFieldValue(15, 0, poolLengthUnit.value, Fit.SUBFIELD_INDEX_MAIN_FIELD);
+    }
+    
+    /**
+     * Get notes field
+     *
+     * @return notes
+     */
+    public String getNotes() {
+        return getFieldStringValue(17, 0, Fit.SUBFIELD_INDEX_MAIN_FIELD);
+    }
+
+    /**
+     * Set notes field
+     *
+     * @param notes The new notes value to be set
+     */
+    public void setNotes(String notes) {
+        setFieldValue(17, 0, notes, Fit.SUBFIELD_INDEX_MAIN_FIELD);
     }
 
 }
