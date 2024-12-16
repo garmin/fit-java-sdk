@@ -2,11 +2,11 @@ Manifest-Version: 1.0
 Name: com/garmin/fit
 Class-Path: fit.jar
 Specification-Title: FIT File Format Library
-Specification-Version: 2.0.21.141.0
+Specification-Version: 2.0.21.158.0
 Specification-Vendor: Garmin
 Implementation-Title: FIT File Format Library
-Implementation-Version: 2.0.21.141.0
+Implementation-Version: 2.0.21.158.0
 Implementation-Vendor: Garmin
 Package-Title: com.garmin.fit
-Package-Version: 2.0.21.141.0
+Package-Version: 2.0.21.158.0
 Package-Vendor: Garmin
