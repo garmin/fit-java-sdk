@@ -13,6 +13,8 @@
 package com.garmin.fit.util;
 
 public final class SemicirclesConverter {
+    private SemicirclesConverter() {}
+
     static final double PI_RADIANS = 0x80000000L;
 
     static final double CONVERSION_FACTOR = 180.0 / PI_RADIANS;
@@ -24,11 +26,7 @@ public final class SemicirclesConverter {
      * @return the converted value in degrees
      */
     public static double semicirclesToDegrees(int semicircles) {
-        double degrees = 0.0;
-
-        degrees = semicircles * CONVERSION_FACTOR;
-
-        return degrees;
+        return semicircles * CONVERSION_FACTOR;
     }
 
     /**

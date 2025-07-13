@@ -3,6 +3,8 @@ package com.garmin.fit.util;
 import java.time.Instant;
 
 public class DateTimeConverter {
+    private DateTimeConverter() {}
+
     static final long FIT_EPOCH_MS = 631065600000L;
 
     /**

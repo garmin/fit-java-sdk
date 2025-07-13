@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class StreamHelpers {
+    private StreamHelpers() {}
 
     /**
      * Creates a java.io.ByteArrayInputStream from a file.
@@ -31,7 +32,6 @@ public class StreamHelpers {
      * @throws IOException if an error occurs while creating a ByteArrayInputStream
      */
     public static ByteArrayInputStream byteStreamFromFile(String fileName) throws IOException {
-        ByteArrayInputStream byteArrayInputStream;
         FileInputStream inputStream = new FileInputStream(fileName);
         return byteStreamFromInputStream(inputStream);
     }
@@ -69,12 +69,12 @@ public class StreamHelpers {
      * @throws Exception if an error occurs while creating a file or writing the stream to the file
      */
     public static void writeByteStreamToFile(ByteArrayOutputStream csvStream, String outputFileName, Boolean writeUTF8ByteOrderMark) throws Exception {
-            FileOutputStream csvFile = new FileOutputStream(outputFileName);
+            try (FileOutputStream csvFile = new FileOutputStream(outputFileName)) {
+                if (writeUTF8ByteOrderMark.equals(Boolean.TRUE)) {
+                    csvFile.write(Fit.UTF8_BOM_BYTES);
+                }
 
-            if (writeUTF8ByteOrderMark) {
-                csvFile.write(Fit.UTF8_BOM_BYTES);
+                csvStream.writeTo(csvFile);
             }
-
-            csvStream.writeTo(csvFile);
     }
 }
