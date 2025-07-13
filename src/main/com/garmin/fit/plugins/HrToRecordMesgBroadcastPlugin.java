@@ -12,7 +12,6 @@
 
 package com.garmin.fit.plugins;
 
-import java.lang.Math;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -86,7 +85,7 @@ public class HrToRecordMesgBroadcastPlugin implements MesgBroadcastPlugin {
      */
     public void onBroadcast(final List<Mesg> mesgs) {
         // Check if we have an activity file and have received HR messages
-        if (isActivityFile && heartrates.size() > 0) {
+        if (isActivityFile && !heartrates.isEmpty()) {
             int heartrateIndex = 0;
             DateTime recordRangeStartTime = null;
 
@@ -124,17 +123,12 @@ public class HrToRecordMesgBroadcastPlugin implements MesgBroadcastPlugin {
                         }
                         // Check if the heartrate timestamp exceeds the record time
                         else if (heartrate.timestamp.compareTo(recordRangeEndTime) > 0) {
-                            findingInRangeHrMesgs = false;
-
                             if (hrSumCount > 0) {
                                 // Update record's heart rate value
                                 short avgHR = (short) Math.round((((float) hrSum) / hrSumCount));
                                 recordMesg.setHeartRate(avgHR);
-                                mesgs.set(mesgCounter, (Mesg) recordMesg);
+                                mesgs.set(mesgCounter, recordMesg);
                             }
-                            // Reset HR average accumulators
-                            hrSum = 0;
-                            hrSumCount = 0;
 
                             recordRangeStartTime = new DateTime(recordRangeEndTime);
 
@@ -167,10 +161,10 @@ public class HrToRecordMesgBroadcastPlugin implements MesgBroadcastPlugin {
 
     @SuppressWarnings("serial")
     private class HeartRateList extends ArrayList<HeartRate> {
-        final private long GAP_INCREMENT_MILLISECONDS = 250;
-        final private float GAP_INCREMENT_SECONDS = GAP_INCREMENT_MILLISECONDS / 1000.0f;
-        final private long GAP_MAX_MILLISECONDS = 5000;
-        final private long GAP_MAX_STEPS = GAP_MAX_MILLISECONDS / GAP_INCREMENT_MILLISECONDS;
+        private final long GAP_INCREMENT_MILLISECONDS = 250;
+        private final float GAP_INCREMENT_SECONDS = GAP_INCREMENT_MILLISECONDS / 1000.0f;
+        private final long GAP_MAX_MILLISECONDS = 5000;
+        private final long GAP_MAX_STEPS = GAP_MAX_MILLISECONDS / GAP_INCREMENT_MILLISECONDS;
 
         private Float anchorEventTimestamp = 0.0f;
         private DateTime anchorTimestamp = null;

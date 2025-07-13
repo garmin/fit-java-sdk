@@ -77,33 +77,27 @@ public class ThreeDSensorAdjustmentPlugin implements MesgBroadcastPlugin {
      * @param mesg the message that has just been buffered by BufferedMesgBroadcaster
      */
     public void onIncomingMesg(final Mesg mesg) {
-        switch (mesg.getNum()) {
 
-            // Capture the calibration parameters
-        case MesgNum.THREE_D_SENSOR_CALIBRATION:
+        // Capture the calibration parameters
+        if (mesg.getNum() == MesgNum.THREE_D_SENSOR_CALIBRATION) {
             ThreeDSensorCalibrationMesg calMesg = new ThreeDSensorCalibrationMesg(mesg);
 
-            switch(calMesg.getSensorType()) {
-            case ACCELEROMETER:
-                accelCalParams.LoadParams(calMesg);
-                haveAccelCal = true;
-                break;
-            case GYROSCOPE:
-                gyroCalParams.LoadParams(calMesg);
-                haveGyroCal = true;
-                break;
-            case COMPASS:
-                magCalParams.LoadParams(calMesg);
-                haveMagCal = true;
-                break;
-            default:
-                break;
+            switch (calMesg.getSensorType()) {
+                case ACCELEROMETER:
+                    accelCalParams.LoadParams(calMesg);
+                    haveAccelCal = true;
+                    break;
+                case GYROSCOPE:
+                    gyroCalParams.LoadParams(calMesg);
+                    haveGyroCal = true;
+                    break;
+                case COMPASS:
+                    magCalParams.LoadParams(calMesg);
+                    haveMagCal = true;
+                    break;
+                default:
+                    break;
             }
-            break;
-
-        default:
-            break;
-
         } // switch
     }
 
@@ -199,7 +193,7 @@ public class ThreeDSensorAdjustmentPlugin implements MesgBroadcastPlugin {
         mesg.getField(fieldsXYZ[Z_AXIS_OFFSET]).addValue(calibratedXYZ[Z_AXIS_OFFSET]);
     }
 
-    private float[] adjustSensorData(int rawData[], CalibrationParameters calParams) {
+    private float[] adjustSensorData(int[] rawData, CalibrationParameters calParams) {
         float[] calibratedValues = new float[rawData.length];
         float[] rotatedValues = new float[rawData.length];
 

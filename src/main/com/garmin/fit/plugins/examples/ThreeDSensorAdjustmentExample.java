@@ -15,7 +15,6 @@ import com.garmin.fit.util.StreamHelpers;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
-import java.io.InputStream;
 
 /**
  * Example demonstrating usage of BufferedMesgBroadcaster and
