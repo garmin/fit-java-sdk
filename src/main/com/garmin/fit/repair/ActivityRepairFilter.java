@@ -39,7 +39,7 @@ import java.util.List;
 
 public class ActivityRepairFilter implements BufferedMesgListener, MesgSource {
     private final FitListener fitListener = new FitListener();
-    private final ArrayList<MesgListener> mesgListeners = new ArrayList<MesgListener>();
+    private final ArrayList<MesgListener> mesgListeners = new ArrayList<>();
     private final ArrayList<Mesg> filteredRecordMesgs = new ArrayList<>();
     private long serialNumber = 123456789;
     private RecordMesg previousMesg = null;
@@ -82,7 +82,7 @@ public class ActivityRepairFilter implements BufferedMesgListener, MesgSource {
      * @return true if the file can be repaired; false if it cannot.
      */
     public boolean canRepairFile() {
-        return filteredRecordMesgs.size() != 0;
+        return !filteredRecordMesgs.isEmpty();
     }
 
     /**
@@ -91,7 +91,7 @@ public class ActivityRepairFilter implements BufferedMesgListener, MesgSource {
      */
     @Override
     public void flushMesgs() {
-        if (filteredRecordMesgs.size() == 0) {
+        if (filteredRecordMesgs.isEmpty()) {
             return;
         }
 
@@ -150,7 +150,7 @@ public class ActivityRepairFilter implements BufferedMesgListener, MesgSource {
             return;
         }
 
-        if (filteredRecordMesgs.size() == 0) {
+        if (filteredRecordMesgs.isEmpty()) {
             filteredRecordMesgs.add(currentMesg);
             previousMesg = currentMesg;
             return;
@@ -296,7 +296,7 @@ public class ActivityRepairFilter implements BufferedMesgListener, MesgSource {
     }
 
     private void flushMesgs(List<? extends Mesg> mesgs) {
-        mesgs.forEach(mesg -> flushMesg(mesg));
+        mesgs.forEach(this::flushMesg);
     }
 }
 

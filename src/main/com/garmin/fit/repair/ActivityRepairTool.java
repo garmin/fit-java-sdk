@@ -36,7 +36,7 @@ public class ActivityRepairTool {
         outputFilePath = createOutputFilePath();
     }
 
-    public static void main(String args[]) throws IOException {
+    public static void main(String[] args) {
         if (!validateCommandlineArgs(args)) {
             printUsage();
             return;
@@ -78,18 +78,14 @@ public class ActivityRepairTool {
 
         ActivityRepairFilter activityRepairFilter = new ActivityRepairFilter();
 
-        try {
-            inputFileStream = new FileInputStream(inputFilePath);
+        try (FileInputStream fileInputStream = new FileInputStream(inputFilePath)) {
 
             Decode decoder = new Decode();
             decoder.addListener(activityRepairFilter);
-            decoder.read(inputFileStream);
+            decoder.read(fileInputStream);
         }
         catch (Exception e) {
             System.out.println("Error while decoding file. Attempting to repair file...");
-        }
-        finally {
-            closeInputStream();
         }
 
         if (!activityRepairFilter.canRepairFile()) {
