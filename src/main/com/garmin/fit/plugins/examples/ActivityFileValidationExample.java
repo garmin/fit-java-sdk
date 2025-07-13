@@ -27,9 +27,8 @@ public class ActivityFileValidationExample {
 
         ActivityFileValidationPlugin plugin = new ActivityFileValidationPlugin();
 
-        try {
+        try (FileInputStream inputStream = new FileInputStream(args[0])) {
             System.out.println("Opening file: " + args[0]);
-            FileInputStream inputStream = new FileInputStream(args[0]);
 
             FitDecoder fitDecoder = new FitDecoder();
 
@@ -53,7 +52,7 @@ public class ActivityFileValidationExample {
             // may still be decoded messages that are worth validating,
             // so force the validation checks to execute. Some tests may be
             // skipped or fail due to missing messages.
-            if (plugin.getResults().size() == 0) {
+            if (plugin.getResults().isEmpty()) {
                 plugin.repeatValidation();
             }
 

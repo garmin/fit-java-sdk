@@ -33,9 +33,7 @@ import com.garmin.fit.plugins.ActivityFileValidationResult.Status;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public class ActivityFileValidationPlugin implements MesgBroadcastPlugin {
@@ -68,7 +66,7 @@ public class ActivityFileValidationPlugin implements MesgBroadcastPlugin {
         // FileId Message Checks
         results.add(checkFileIdMesgExists(fitMessages.getFileIdMesgs()));
 
-        if (fitMessages.getFileIdMesgs().size() > 0) {
+        if (!fitMessages.getFileIdMesgs().isEmpty()) {
             results.add(checkFileIdMesgIsFirst(mesgs));
             results.add(checkFileIdMesgType(fitMessages.getFileIdMesgs().get(0)));
             results.add(checkFileIdMesgManufacturerId(fitMessages.getFileIdMesgs().get(0)));
@@ -78,7 +76,7 @@ public class ActivityFileValidationPlugin implements MesgBroadcastPlugin {
         // Activity Message Checks
         results.add(checkActivityMesgExists(fitMessages.getActivityMesgs()));
 
-        if (fitMessages.getActivityMesgs().size() > 0) {
+        if (!fitMessages.getActivityMesgs().isEmpty()) {
             results.add(checkActivityMesgTimestamp(fitMessages.getActivityMesgs().get(0)));
             results.add(checkActivityMesgLocalTimeStamp(fitMessages.getActivityMesgs().get(0)));
             results.add(checkActivityMesgTotalTimerTime(fitMessages.getActivityMesgs().get(0), fitMessages.getSessionMesgs()));
@@ -120,7 +118,7 @@ public class ActivityFileValidationPlugin implements MesgBroadcastPlugin {
      * circumstances, this method does not need to called directly.
      */
     public void repeatValidation() {
-        onBroadcast(new ArrayList<Mesg>());
+        onBroadcast(new ArrayList<>());
     }
 
     public int getMesgCount() {
@@ -134,7 +132,7 @@ public class ActivityFileValidationPlugin implements MesgBroadcastPlugin {
     ActivityFileValidationResult checkFileIdMesgExists(List<FileIdMesg> fileIdMesgs) {
         ActivityFileValidationResult result = new ActivityFileValidationResult("FileId Message Exists", Level.REQUIRED);
 
-        if (fileIdMesgs.size() > 0) {
+        if (!fileIdMesgs.isEmpty()) {
             result.setStatus(Status.PASSED);
         } else {
             result.setStatus(Status.FAILED);
@@ -205,7 +203,7 @@ public class ActivityFileValidationPlugin implements MesgBroadcastPlugin {
     ActivityFileValidationResult checkActivityMesgExists(List<ActivityMesg> activityMesgs) {
         ActivityFileValidationResult result = new ActivityFileValidationResult("Activity Message Exists", Level.REQUIRED);
 
-        if (activityMesgs.size() > 0) {
+        if (!activityMesgs.isEmpty()) {
             result.setStatus(Status.PASSED);
         } else {
             result.setStatus(Status.FAILED);
@@ -293,7 +291,7 @@ public class ActivityFileValidationPlugin implements MesgBroadcastPlugin {
     ActivityFileValidationResult checkSessionMesgStartTime(List<SessionMesg> sessionMesgs) {
         ActivityFileValidationResult result = new ActivityFileValidationResult("Session Message Start Time Is Valid", Level.REQUIRED);
 
-        if (sessionMesgs.size() == 0) {
+        if (sessionMesgs.isEmpty()) {
             result.setStatus(Status.SKIPPED);
             return result;
         }
@@ -321,7 +319,7 @@ public class ActivityFileValidationPlugin implements MesgBroadcastPlugin {
     ActivityFileValidationResult checkSessionMesgTotalTimerTimeAndTotalElapsedTime(List<SessionMesg> sessionMesgs) {
         ActivityFileValidationResult result = new ActivityFileValidationResult("Session Message Total Timer Time and Total Elapsed Time are Valid", Level.REQUIRED);
 
-        if (sessionMesgs.size() == 0) {
+        if (sessionMesgs.isEmpty()) {
             result.setStatus(Status.SKIPPED);
             return result;
         }
@@ -354,7 +352,7 @@ public class ActivityFileValidationPlugin implements MesgBroadcastPlugin {
     ActivityFileValidationResult checkSessionMesgFirstLapIndexAndNumLapsAreSequentialAndAbut(List<SessionMesg> sessionMesgs, List<LapMesg> lapMesgs) {
         ActivityFileValidationResult result = new ActivityFileValidationResult("Session Message First Lap Index and Num Laps are Valid", Level.REQUIRED);
 
-        if (sessionMesgs.size() == 0 || lapMesgs.size() == 0) {
+        if (sessionMesgs.isEmpty() || lapMesgs.isEmpty()) {
             result.setStatus(Status.SKIPPED);
             result.setDescription("No Session messages exist and/or no Lap messages exist.");
             return result;
@@ -399,7 +397,7 @@ public class ActivityFileValidationPlugin implements MesgBroadcastPlugin {
     ActivityFileValidationResult checkSessionMesgTotalTimerTime(List<SessionMesg> sessionMesgs, List<LapMesg> lapMesgs) {
         ActivityFileValidationResult result = new ActivityFileValidationResult("Session Message Total Timer Time Is Equal To Sum of Lap Messages Total Timer Time", Level.REQUIRED);
 
-        if (sessionMesgs.size() == 0 || lapMesgs.size() == 0) {
+        if (sessionMesgs.isEmpty() || lapMesgs.isEmpty()) {
             result.setStatus(Status.SKIPPED);
             result.setDescription("No Session messages exist and/or no Lap messages exist.");
             return result;
@@ -443,7 +441,7 @@ public class ActivityFileValidationPlugin implements MesgBroadcastPlugin {
     ActivityFileValidationResult checkSessionMesgTotalElapsedTime(List<SessionMesg> sessionMesgs, List<LapMesg> lapMesgs) {
         ActivityFileValidationResult result = new ActivityFileValidationResult("Session Message Total Elapsed Time Is Equal To Sum of Lap Messages Total Elapsed Time", Level.REQUIRED);
 
-        if (sessionMesgs.size() == 0 || lapMesgs.size() == 0) {
+        if (sessionMesgs.isEmpty() || lapMesgs.isEmpty()) {
             result.setStatus(Status.SKIPPED);
             result.setDescription("No Session messages exist and/or no Lap messages exist.");
             return result;
@@ -538,7 +536,7 @@ public class ActivityFileValidationPlugin implements MesgBroadcastPlugin {
     ActivityFileValidationResult checkLapMesgValidStartTimeAndEndTime(List<SessionMesg> sessionMesgs, List<LapMesg> lapMesgs) {
         ActivityFileValidationResult result = new ActivityFileValidationResult("Lap Message Start Time and Timestamp are Valid", Level.REQUIRED);
 
-        if (sessionMesgs.size() == 0 || lapMesgs.size() == 0) {
+        if (sessionMesgs.isEmpty() || lapMesgs.isEmpty()) {
             result.setStatus(Status.SKIPPED);
             return result;
         }
@@ -615,7 +613,7 @@ public class ActivityFileValidationPlugin implements MesgBroadcastPlugin {
     ActivityFileValidationResult checkRecordMesgTimestampsAgainstSessionMesgTimes(List<SessionMesg> sessionMesgs, List<RecordMesg> recordMesgs) {
         ActivityFileValidationResult result = new ActivityFileValidationResult("Record Message Timestamps Fall Within Session Message Times", Level.REQUIRED);
 
-        if (sessionMesgs.size() == 0 || recordMesgs.size() == 0) {
+        if (sessionMesgs.isEmpty() || recordMesgs.isEmpty()) {
             result.setStatus(Status.SKIPPED);
             return result;
         }
@@ -658,7 +656,7 @@ public class ActivityFileValidationPlugin implements MesgBroadcastPlugin {
     ActivityFileValidationResult checkRecordMesgsAreChronological(List<RecordMesg> recordMesgs) {
         ActivityFileValidationResult result = new ActivityFileValidationResult("Record Messages Are in Chronological Ascending Order", Level.REQUIRED);
 
-        if (recordMesgs.size() == 0) {
+        if (recordMesgs.isEmpty()) {
             result.setStatus(Status.SKIPPED);
             return result;
         }
@@ -696,7 +694,7 @@ public class ActivityFileValidationPlugin implements MesgBroadcastPlugin {
     ActivityFileValidationResult checkDeviceInfoMesgValidDeviceIndex(List<DeviceInfoMesg> deviceInfoMesgs) {
         ActivityFileValidationResult result = new ActivityFileValidationResult("Device Info Message Device Index is Valid", Level.REQUIRED);
 
-        if (deviceInfoMesgs.size() == 0) {
+        if (deviceInfoMesgs.isEmpty()) {
             result.setStatus(Status.SKIPPED);
             return result;
         }
@@ -727,7 +725,7 @@ public class ActivityFileValidationPlugin implements MesgBroadcastPlugin {
     ActivityFileValidationResult checkDeviceInfoMesgValidManufacturerIdExists(List<DeviceInfoMesg> deviceInfoMesgs) {
         ActivityFileValidationResult result = new ActivityFileValidationResult("Device Info Message Manufacturer Id is Valid", Level.OPTIONAL);
 
-        if (deviceInfoMesgs.size() == 0) {
+        if (deviceInfoMesgs.isEmpty()) {
             result.setStatus(Status.SKIPPED);
             return result;
         }
@@ -758,13 +756,13 @@ public class ActivityFileValidationPlugin implements MesgBroadcastPlugin {
     @SafeVarargs
     @SuppressWarnings("varargs")
     final boolean isEmpty(List<? extends Mesg>... lists) {
-        return Arrays.stream(lists).anyMatch(l -> l.size() == 0);
+        return Arrays.stream(lists).anyMatch(l -> l.isEmpty());
     }
 
     ActivityFileValidationResult checkValidMesgIndexes(List<? extends Mesg> mesgs, String mesgName) {
         ActivityFileValidationResult result = new ActivityFileValidationResult(mesgName + " Message Valid Message Index", Level.REQUIRED);
 
-        if (mesgs.size() == 0) {
+        if (mesgs.isEmpty()) {
             result.setStatus(Status.SKIPPED);
             return result;
         }
@@ -793,7 +791,7 @@ public class ActivityFileValidationPlugin implements MesgBroadcastPlugin {
     ActivityFileValidationResult checkMesgValidTimestamp(List<? extends Mesg> mesgs, String name) {
         ActivityFileValidationResult result = new ActivityFileValidationResult(name + " Message Timestamps are Valid", Level.REQUIRED);
 
-        if (mesgs.size() == 0) {
+        if (mesgs.isEmpty()) {
             result.setStatus(Status.SKIPPED);
             return result;
         }
@@ -815,7 +813,7 @@ public class ActivityFileValidationPlugin implements MesgBroadcastPlugin {
     ActivityFileValidationResult checkValidFieldSums(Mesg mesg, List<? extends Mesg> mesgs, String mesgName, String mesgListName, String fieldName) {
         ActivityFileValidationResult result = new ActivityFileValidationResult(mesgName + " Message " + fieldName + " is Equal to the Sum of " + mesgListName + " Messages " + fieldName + " Values", Level.REQUIRED);
 
-        if (mesgs.size() == 0) {
+        if (mesgs.isEmpty()) {
             result.setStatus(Status.SKIPPED);
             return result;
         }
@@ -899,7 +897,7 @@ public class ActivityFileValidationPlugin implements MesgBroadcastPlugin {
     }
 
     Status checkFieldValuesAreValid(List<? extends Mesg> mesgs, String fieldName) {
-        if (mesgs.size() == 0) {
+        if (mesgs.isEmpty()) {
             return Status.SKIPPED;
         }
 
