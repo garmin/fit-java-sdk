@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.garmin</groupId>
     <artifactId>fit</artifactId>
-    <version>21.176.0</version>
+    <version>21.188.0</version>
     <packaging>jar</packaging>
     <name>FIT SDK</name>
     <description>The Official Garmin FIT SDK</description>
