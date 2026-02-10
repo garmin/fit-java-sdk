@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.garmin</groupId>
     <artifactId>fit</artifactId>
-    <version>21.188.0</version>
+    <version>21.194.0</version>
     <packaging>jar</packaging>
     <name>FIT SDK</name>
     <description>The Official Garmin FIT SDK</description>
@@ -36,16 +36,38 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.7.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
+            <version>5.7.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>3.20.2</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
     <build>
         <sourceDirectory>src/main</sourceDirectory>
 
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.0</version>
+                <version>3.13.0</version>
                 <configuration>
-                    <source>1.8</source> <!-- jdk version -->
-                    <target>1.8</target> <!-- jdk version -->
+                    <source>8</source> <!-- jdk version -->
+                    <target>8</target> <!-- jdk version -->
+                    <release>8</release>
                     <encoding>UTF-8</encoding>
                     <excludes>
                         <exclude>**/examples/</exclude>
@@ -74,14 +96,24 @@
                     </execution>
                 </executions>
             </plugin>
-
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M7</version>
+                <configuration>
+                    <useModulePath>false</useModulePath>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>3.5.0</version>
                 <configuration>
                     <sourcepath>${project.build.sourceDirectory}</sourcepath>
-                    <additionalparam>-Xdoclint:all</additionalparam>
+                    <additionalJOptions>
+                        <additionalJOption>-Xdoclint:all</additionalJOption>
+                        <additionalJOption>-quiet</additionalJOption>
+                    </additionalJOptions>
                     <excludePackageNames>*.examples:</excludePackageNames>
                 </configuration>
                 <executions>
@@ -93,28 +125,6 @@
                     </execution>
                 </executions>
             </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-gpg-plugin</artifactId>
-                <version>1.5</version>
-                <executions>
-                    <execution>
-                        <id>sign-artifacts</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>sign</goal>
-                        </goals>
-                        <configuration>
-                            <gpgArguments>
-                                <arg>--pinentry-mode</arg>
-                                <arg>loopback</arg>
-                            </gpgArguments>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
             <plugin>
                 <groupId>org.sonatype.central</groupId>
                 <artifactId>central-publishing-maven-plugin</artifactId>
@@ -128,7 +138,6 @@
         </plugins>
     </build>
 
-
     <distributionManagement>
         <repository>
             <id>central</id>
@@ -136,4 +145,173 @@
             <url>central.sonatype.com</url>
         </repository>
     </distributionManagement>
+
+    <profiles>
+        <profile>
+            <id>sign-artifacts</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.5</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                                <configuration>
+                                    <gpgArguments>
+                                        <arg>--pinentry-mode</arg>
+                                        <arg>loopback</arg>
+                                    </gpgArguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>fitsdk</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-jar-plugin</artifactId>
+                        <version>2.4</version>
+                        <executions>
+                            <execution>
+                                <id>fitsdk-jar</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                                <configuration>
+                                    <finalName>fit</finalName>
+                                    <includes>
+                                        <include>**/*.class</include>
+                                    </includes>
+                                    <excludes>
+                                        <exclude>**/examples/**</exclude>
+                                        <exclude>**/csv/examples/**</exclude>
+                                        <exclude>**/plugins/examples/**</exclude>
+                                    </excludes>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>fitcsvtool</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-jar-plugin</artifactId>
+                        <version>2.4</version>
+                        <executions>
+                            <execution>
+                                <id>fitcsvtool-jar</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                                <configuration>
+                                    <archive>
+                                        <manifest>
+                                            <mainClass>com.garmin.fit.csv.CSVTool</mainClass>
+                                        </manifest>
+                                    </archive>
+                                    <finalName>FitCSVTool</finalName>
+                                    <includes>
+                                        <include>**/*.class</include>
+                                        <include>**/csv/*.class</include>
+                                        <include>**/util/*.class</include>
+                                        <include>**/plugins/ActivityFileValidation*</include>
+                                    </includes>
+                                    <excludes>
+                                        <exclude>**/examples/**</exclude>
+                                        <exclude>**/csv/examples/**</exclude>
+                                        <exclude>**/repair/**</exclude>
+                                        <exclude>**/plugins/examples/**</exclude>
+                                    </excludes>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>activityfilevalidationplugin</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-jar-plugin</artifactId>
+                        <version>2.4</version>
+                        <executions>
+                            <execution>
+                                <id>activityfilevalidationplugin-jar</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                                <configuration>
+                                    <finalName>ActivityFileValidationPlugin</finalName>
+                                    <includes>
+                                        <include>**/plugins/ActivityFileValidation*.class</include>
+                                    </includes>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>activityrepairtool</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-jar-plugin</artifactId>
+                        <version>2.4</version>
+                        <executions>
+                            <execution>
+                                <id>activityrepairtool-jar</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                                <configuration>
+                                    <archive>
+                                        <manifest>
+                                            <mainClass>com.garmin.fit.repair.ActivityRepairTool</mainClass>
+                                        </manifest>
+                                    </archive>
+                                    <finalName>ActivityRepairTool</finalName>
+                                    <includes>
+                                        <include>**/*.class</include>
+                                        <include>**/repair/*.class</include>
+                                    </includes>
+                                    <excludes>
+                                        <exclude>**/examples/**</exclude>
+                                        <exclude>**/csv/**</exclude>
+                                        <exclude>**/util/**</exclude>
+                                        <exclude>**/plugins/**</exclude>
+                                    </excludes>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
