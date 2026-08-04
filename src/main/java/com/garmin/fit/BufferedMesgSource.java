@@ -12,6 +12,6 @@
 
 package com.garmin.fit;
 
-public interface LapMesgListener {
-    public void onMesg(LapMesg mesg);
+public interface BufferedMesgSource extends MesgSource {
+    void flushMesgs();
 }
